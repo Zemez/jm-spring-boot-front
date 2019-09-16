@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::head(~{::title},~{},~{})">
+    <title>Sign-in page</title>
+</head>
+<body>
+<div th:replace="layout::navbar('sign-in')"></div>
+<div th:replace="layout::alerts"></div>
+<main class="container">
+    <div class="row justify-content-center">
+        <form class="form-signin text-center" th:action="@{/auth/sign-in}" th:method="post">
+            <h3 class="h3 mb-3 font-weight-normal">Please login</h3>
+            <label class="sr-only" for="username">Username</label>
+            <input autofocus class="form-control" id="username" name="username" placeholder="Username" required
+                   type="text">
+            <label class="sr-only" for="password">Password</label>
+            <input class="form-control" id="password" name="password" placeholder="Password" required type="password">
+            <!--            <div class="checkbox mb-3">-->
+            <!--                <label>-->
+            <!--                    <input type="checkbox" value="remember-me"> Remember me-->
+            <!--                </label>-->
+            <!--            </div>-->
+            <div class="row buttons justify-content-center">
+                <button class="btn btn-md btn-outline-primary" type="submit">login</button>
+                <button class="btn btn-md btn-outline-secondary" type="reset">reset</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

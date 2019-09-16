@@ -1,0 +1,15 @@
+spring.main.banner-mode=off
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/example_db?autoReconnect=true&useSSL=false
+spring.datasource.username=example_user
+spring.datasource.password=example_pass
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.open-in-view=false
+spring.devtools.add-properties=true
+spring.devtools.livereload.enabled=true
+spring.http.log-request-details=true
+logging.level.web=debug
+logging.level.sql=debug
+logging.level.com.javamentor.jm_spring_boot_front.debug

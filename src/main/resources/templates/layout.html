@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title,links,scripts)">
+    <title th:replace="${title}">Some page</title>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          rel="stylesheet" th:href="@{//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <th:block th:replace="${links}"/>
+    <script th:src="@{//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+    <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            th:src="@{//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <th:block th:replace="${scripts}"/>
+</head>
+
+<div th:fragment="navbar(active)">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#" th:href="@{/}">Project name</a>
+        <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbar" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <!--            <ul class="navbar-nav mr-auto">-->
+            <!--                <li class="nav-item"  th:classappend="${active == 'home' ? 'active' : _}">-->
+            <!--                    <a class="nav-link" th:href="@{/}">Home</a>-->
+            <!--                </li>-->
+            <!--                <li class="nav-item" th:classappend="${active == 'admin' ? 'active' : _}">-->
+            <!--                    <a class="nav-link" th:href="@{/admin}">Admin</a>-->
+            <!--                </li>-->
+            <!--            </ul>-->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" th:classappend="${active == 'user'} ? 'active'"
+                    th:unless="${#request.remoteUser}">
+                    <a class="nav-link" th:href="@{/auth/sign-up}">Register</a>
+                </li>
+                <li class="nav-item" th:classappend="${active == 'sign-in'} ? 'active'"
+                    th:unless="${#request.remoteUser}">
+                    <a class="nav-link" th:href="@{/auth/sign-in}">Login</a>
+                </li>
+                <!--                <li class="nav-item" th:classappend="${active == 'user' ? 'active' : _}" th:if="${#request.remoteUser}">-->
+                <!--                    <a class="nav-link" th:href="@{/user}" th:text="${#strings.capitalize(#request.remoteUser)}"></a>-->
+                <!--                </li>-->
+                <li class="nav-item" th:if="${#request.remoteUser}"><a class="nav-link" th:href="@{/auth/sign-out}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<menu class="col-2" th:fragment="menu(active)" th:if="${#request.remoteUser != null}">
+    <ul class="nav nav-pills flex-column">
+        <li class="nav-item" th:if="${session.current_user != null && session.current_user.isAdmin()}">
+            <a class="nav-link" th:classappend="${active == 'admin'} ? 'active'" th:href="@{/admin}">Admin</a>
+        </li>
+        <li class="nav-item" th:if="${session.current_user != null && session.current_user.isUser()}">
+            <a class="nav-link" th:classappend="${active == 'user'} ? 'active'" th:href="@{/user}">User</a>
+        </li>
+    </ul>
+</menu>
+
+<div class="container text-center" th:fragment="alerts">
+    <!--/*@thymesVar id="message" type="String"*/-->
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${message}">
+        <strong class="alert-heading">Done!</strong>&nbsp;<span th:text="${message}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert"
+         th:if="${session != null} and ${session.message != null} and not ${param.error}">
+        <strong class="alert-heading">Done!</strong>&nbsp;<span th:text="${session.message}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p th:if="${#session.removeAttribute('message')}">x</p>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert"
+         th:if="${session != null} and ${session.message != null} and ${param.error}">
+        <strong class="alert-heading">Error!</strong>&nbsp;<span th:text="${session.message}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p th:if="${#session.removeAttribute('message')}">x</p>
+    </div>
+    <!--/*@thymesVar id="error" type="String"*/-->
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error}">
+        <strong class="alert-heading">Error!</strong>&nbsp;<span th:text="${error}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert"
+         th:if="${session != null} and ${session.error != null}">
+        <strong class="alert-heading">Error!</strong>&nbsp;<span th:text="${session.error}"></span>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p th:if="${#session.removeAttribute('error')}">x</p>
+    </div>
+</div>
+
+</html>

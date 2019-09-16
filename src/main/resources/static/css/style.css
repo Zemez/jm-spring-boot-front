@@ -1,0 +1,63 @@
+body {
+    padding-top: 56px;
+    background-color: rgb(245, 245, 245);
+}
+
+h3 {
+    margin-top: 1rem;
+}
+
+h6 {
+    font-weight: 600;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background-color: lightgrey;
+}
+
+h6.border-bottom {
+    margin-bottom: 1rem;
+}
+
+form button {
+    min-width: 80px;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+}
+
+.buttons {
+    margin: 1rem;
+}
+
+form > div > label {
+    font-weight: 600;
+    /*text-align: right;*/
+    text-wrap: avoid;
+}
+
+.form-signin input {
+    margin: 0.2rem 0;
+}
+
+/*.user-row {*/
+/*    margin: 0;*/
+/*}*/
+
+.user-form-group {
+    margin-bottom: 0.2rem;
+}
+
+.users-table tr.user:hover {
+    cursor: pointer;
+}
+
+.error .table, .users-table {
+    margin-bottom: 0;
+}
+
+.alert {
+    margin-bottom: 0;
+}
+
+#create-content {
+    margin-top: 1rem;
+}

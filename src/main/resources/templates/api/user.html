@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::head(~{::title},~{},~{})">
+    <title>User page</title>
+</head>
+<body>
+<div th:replace="layout::navbar('user')"></div>
+<div class="row container-fluid">
+    <div th:replace="layout::menu('user')"></div>
+    <main class="col">
+        <div th:replace="layout::alerts"></div>
+        <h3 class="text-center">User</h3>
+        <div class="row justify-content-center" th:fragment="user-form-full(action)">
+            <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-6">
+                <th:block th:fragment="user-form(action)"
+                          th:with="is_admin=${session.current_user != null && session.current_user.isAdmin()}">
+                    <form action="#" id="user-form" th:action="@{#}" th:method="post">
+                        <div class="form-group user-form-group form-row" th:if="${action} == 'edit'">
+                            <label class="col-5 col-form-label" for="id"
+                                   th:text="${#strings.capitalize('__#{user.id}__')}">#</label>
+                            <div class="col">
+                                <input class="form-control" id="id" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group user-form-group form-row">
+                            <label class="col-5 col-form-label" for="username"
+                                   th:text="${#strings.capitalize('__#{user.username}__')}">Username</label>
+                            <div class="col">
+                                <input class="form-control" id="username" th:readonly="${action} == 'edit'"/>
+                            </div>
+                        </div>
+                        <div class="form-group user-form-group form-row">
+                            <label class="col-5 col-form-label" for="password"
+                                   th:text="${#strings.capitalize('__#{user.password}__')}">Password</label>
+                            <div class="col">
+                                <input class="form-control" id="password"/>
+                            </div>
+                        </div>
+                        <th:block th:if="${is_admin}">
+                            <div class="form-group user-form-group form-row">
+                                <label class="col-5 col-form-label" for="enabled"
+                                       th:text="${#strings.capitalize('__#{user.enabled}__')}">Enabled</label>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" id="enabled" type="checkbox"/>
+                                </div>
+                            </div>
+                            <div class="form-group user-form-group form-row">
+                                <label class="col-5 col-form-label" for="accountNonExpired"
+                                       th:text="${#strings.capitalize('__#{user.account_non_expired}__')}">Account
+                                    non expired</label>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" id="accountNonExpired" type="checkbox"/>
+                                </div>
+                            </div>
+                            <div class="form-group user-form-group form-row">
+                                <label class="col-5 col-form-label" for="credentialsNonExpired"
+                                       th:text="${#strings.capitalize('__#{user.credential_non_expired}__')}">Credential
+                                    non expired</label>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" id="credentialsNonExpired" type="checkbox"/>
+                                </div>
+                            </div>
+                            <div class="form-group user-form-group form-row">
+                                <label class="col-5 col-form-label" for="accountNonLocked"
+                                       th:text="${#strings.capitalize('__#{user.account_non_locked}__')}">Account
+                                    non locked</label>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" id="accountNonLocked" type="checkbox"/>
+                                </div>
+                            </div>
+                            <div class="form-group user-form-group form-row">
+                                <label class="col-5 col-form-label" for="roles"
+                                       th:text="${#strings.capitalize('__#{user.roles}__')}">Roles</label>
+                                <div class="col form-check-inline" id="roles">
+                                    <div class="form-check form-check-inline"
+                                         th:each="role,status : ${@roleService.findAll()}">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" th:id="${role.id}" th:value="${role.name}"
+                                                   type="checkbox"/>[[${role.name}]]
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                        <div class="form-group user-form-group form-row">
+                            <label class="col-5 col-form-label" for="firstName"
+                                   th:text="${#strings.capitalize('__#{user.first_name}__')}">First name</label>
+                            <div class="col">
+                                <input class="form-control" id="firstName"/>
+                            </div>
+                        </div>
+                        <div class="form-group user-form-group form-row">
+                            <label class="col-5 col-form-label" th:for="lastName"
+                                   th:text="${#strings.capitalize('__#{user.last_name}__')}">Last name</label>
+                            <div class="col">
+                                <input class="form-control" id="lastName"/>
+                            </div>
+                        </div>
+                        <div class="form-group user-form-group form-row">
+                            <label class="col-5 col-form-label" for="email"
+                                   th:text="${#strings.capitalize('__#{user.email}__')}">Email</label>
+                            <div class="col">
+                                <input class="form-control" id="email" onclick="return false"/>
+                            </div>
+                        </div>
+                        <!--/* buttons */-->
+                        <div class="row buttons justify-content-center">
+                            <button class="btn btn-md btn-outline-primary"
+                                    th:id="${action == 'edit'} ? 'update-button' : 'create-button'"
+                                    th:text="${action == 'edit'} ? 'update' : (${action} ?: 'create')"
+                                    type="button">action
+                            </button>
+                            <button class="btn btn-md btn-outline-danger" id="delete-button" th:if="${action == 'edit'}"
+                                    th:type="button">delete
+                            </button>
+                            <button class="btn btn-md btn-outline-secondary" th:type="reset">reset</button>
+                        </div>
+                    </form>
+                </th:block>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

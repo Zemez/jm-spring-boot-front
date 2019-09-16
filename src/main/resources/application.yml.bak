@@ -1,0 +1,26 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring_boot_db?autoReconnect=true&useSSL=false
+    username: spring
+    password: spring_Q1
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  devtools:
+    add-properties: true
+    livereload:
+      enabled: true
+  http:
+    log-request-details: true
+logging:
+  level:
+    web: debug
+    sql: debug

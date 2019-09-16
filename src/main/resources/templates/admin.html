@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::head(~{::title},~{},~{::script})">
+    <title>Admin page</title>
+    <script th:src="@{/js/api/users.js}"></script>
+</head>
+<body>
+<div th:replace="layout::navbar('admin')"></div>
+<div class="row container-fluid">
+    <div th:replace="layout::menu('admin')"></div>
+    <main class="col">
+        <div th:replace="layout::alerts"></div>
+        <h3>Admin panel</h3>
+        <div id="alert"></div>
+        <ul class="nav nav-tabs" id="admin-tab" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="users" aria-selected="true" class="nav-link active" data-toggle="tab" href="#users"
+                   id="users-tab" role="tab">Users table</a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="create" aria-selected="false" class="nav-link" data-toggle="tab" href="#create"
+                   id="create-tab" role="tab">New User</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="admin-tab-content">
+            <div aria-labelledby="users-tab" class="tab-pane border-left border-right border-bottom fade show active"
+                 id="users" role="tabpanel">
+                <h6 class="border-left border-right">All users</h6>
+                <div id="users-content" th:replace="api/users::users">Users...</div>
+            </div>
+            <div aria-labelledby="create-tab" class="tab-pane border-left border-right border-bottom fade" id="create"
+                 role="tabpanel">
+                <h6 class="border-bottom">Add new user</h6>
+                <div id="create-content" th:replace="api/user::user-form-full('create')">Create...</div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

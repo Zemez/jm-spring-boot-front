@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::head(~{::title},~{},~{})">
+    <title>Error page</title>
+</head>
+<body>
+<div th:replace="layout::navbar('error')"></div>
+<!--<div th:replace="layout::alerts"></div>-->
+<main class="container-fluid">
+    <div class="error alert alert-danger">
+        <h3 class="alert-heading">Error!</h3>
+        <table class="table table-sm table-borderless">
+            <tr th:if="${status}">
+                <th>Status:</th>
+                <td th:text="${status}"></td>
+            </tr>
+            <tr th:if="${error}">
+                <th>Error:</th>
+                <td th:text="${error}"></td>
+            </tr>
+            <tr th:if="${message}">
+                <th>Message:</th>
+                <td th:text="${message}"></td>
+            </tr>
+            <tr th:if="${timestamp}">
+                <th>Timestamp:</th>
+                <td th:utext="${timestamp}"></td>
+            </tr>
+            <tr th:if="${trace}">
+                <th th:colspan="2">Stacktrace:</th>
+            </tr>
+            <tr th:if="${trace}">
+                <td th:colspan="2" th:text="${trace}"></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

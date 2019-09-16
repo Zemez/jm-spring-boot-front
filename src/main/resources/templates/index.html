@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::head(~{::title},~{},~{})">
+    <title>Home page</title>
+</head>
+<body>
+<div th:replace="layout::navbar('home')"></div>
+<div class="row container-fluid">
+    <div th:replace="layout::menu('user')"></div>
+    <main class="col">
+        <div th:replace="layout::alerts"></div>
+        <h3 th:text="${#request.remoteUser != null} ? 'User page' : 'Home page'">Home page</h3>
+        <p>Welcome,
+            <em th:text="${#request.remoteUser != null ? #strings.capitalize(#request.remoteUser) : 'Anonymous'}"></em>!
+        </p>
+    </main>
+</div>
+</body>
+</html>
