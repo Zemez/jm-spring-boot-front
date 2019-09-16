@@ -2,32 +2,40 @@ package com.javamentor.jm_spring_boot_front.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-//@PropertySource("classpath:backend.properties")
+@PropertySource("classpath:backend.properties")
 public abstract class AbstractRepository<T> implements GenericRepository<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractRepository.class);
 
     private static final String INVALID_NULL_ID = "Invalid null id.";
     private final String INVALID_NULL_ENTITY;
-    private final String API_URL;
+
+    private final Class<T[]> entityArrayClass;
+    private String apiUrl;
+    @Value("${backend.connection.host}")
+    private String host;
+    @Value("${backend.connection.port}")
+    private int port;
 
     private final Class<T> entityClass;
+    @Value("${backend.connection.proto}")
+    private String proto;
     private final RestTemplate restTemplate;
 
-    public AbstractRepository(Class<T> entityClass, RestTemplate restTemplate) {
+    public AbstractRepository(Class<T> entityClass, Class<T[]> entityArrayClass, RestTemplate restTemplate) {
         this.entityClass = entityClass;
+        this.entityArrayClass = entityArrayClass;
         this.restTemplate = restTemplate;
-        API_URL = "http://localhost:8081/api/" + entityClass.getSimpleName().toLowerCase();
         INVALID_NULL_ENTITY = String.format("Invalid null %s.", entityClass.getSimpleName());
     }
 
@@ -36,7 +44,7 @@ public abstract class AbstractRepository<T> implements GenericRepository<T> {
         if (entity == null) {
             throw new IllegalArgumentException(INVALID_NULL_ENTITY);
         }
-        T entityNew = restTemplate.postForEntity(getApiUrl(), entity, entityClass).getBody();
+        T entityNew = restTemplate.postForObject(getApiUrl(), entity, entityClass);
         logger.debug("Create entity: {}", entityNew);
         return entityNew;
     }
@@ -46,17 +54,15 @@ public abstract class AbstractRepository<T> implements GenericRepository<T> {
         if (id == null) {
             throw new IllegalArgumentException(INVALID_NULL_ID);
         }
-        T entity = restTemplate.getForEntity(getApiUrl() + "/" + id, entityClass).getBody();
+        T entity = restTemplate.getForObject(getApiUrl() + "/" + id, entityClass);
         logger.debug("Read entity: {}", entity);
         return entity;
     }
 
     @Override
     public List<T> findAll() {
-        ResponseEntity<T[]> response = restTemplate.exchange(getApiUrl() + "/all", HttpMethod.GET, null,
-                new ParameterizedTypeReference<T[]>() {
-                });
-        List<T> entities = Arrays.asList(Objects.requireNonNull(response.getBody()));
+        T[] result = restTemplate.getForObject(getApiUrl() + "/all", entityArrayClass);
+        List<T> entities = result != null ? Arrays.asList(result) : Collections.emptyList();
         logger.debug("Read all: {}", entities);
         return entities;
     }
@@ -79,8 +85,11 @@ public abstract class AbstractRepository<T> implements GenericRepository<T> {
         restTemplate.delete(getApiUrl() + "/" + id);
     }
 
-    String getApiUrl() {
-        return API_URL;
+    protected String getApiUrl() {
+        if (apiUrl == null) {
+            apiUrl = proto + "://" + host + ":" + port + "/api/" + entityClass.getSimpleName().toLowerCase();
+        }
+        return apiUrl;
     }
 
 }

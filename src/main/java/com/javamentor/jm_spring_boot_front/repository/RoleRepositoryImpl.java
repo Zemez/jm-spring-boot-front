@@ -10,7 +10,7 @@ public class RoleRepositoryImpl extends AbstractRepository<Role> implements Role
     private final RestTemplate restTemplate;
 
     public RoleRepositoryImpl(RestTemplate restTemplate) {
-        super(Role.class, restTemplate);
+        super(Role.class, Role[].class, restTemplate);
         this.restTemplate = restTemplate;
     }
 

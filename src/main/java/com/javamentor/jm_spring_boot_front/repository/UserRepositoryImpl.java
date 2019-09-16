@@ -14,7 +14,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     private final RestTemplate restTemplate;
 
     public UserRepositoryImpl(RestTemplate restTemplate) {
-        super(User.class, restTemplate);
+        super(User.class, User[].class, restTemplate);
         this.restTemplate = restTemplate;
     }
 
