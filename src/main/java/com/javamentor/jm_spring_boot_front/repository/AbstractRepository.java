@@ -20,16 +20,17 @@ public abstract class AbstractRepository<T> implements GenericRepository<T> {
     private static final String INVALID_NULL_ID = "Invalid null id.";
     private final String INVALID_NULL_ENTITY;
 
-    private final Class<T[]> entityArrayClass;
     private String apiUrl;
+
+    @Value("${backend.connection.proto}")
+    private String proto;
     @Value("${backend.connection.host}")
     private String host;
     @Value("${backend.connection.port}")
     private int port;
 
     private final Class<T> entityClass;
-    @Value("${backend.connection.proto}")
-    private String proto;
+    private final Class<T[]> entityArrayClass;
     private final RestTemplate restTemplate;
 
     public AbstractRepository(Class<T> entityClass, Class<T[]> entityArrayClass, RestTemplate restTemplate) {
