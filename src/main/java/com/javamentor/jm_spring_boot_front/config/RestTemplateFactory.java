@@ -41,6 +41,7 @@ public class RestTemplateFactory implements FactoryBean<RestTemplate>, Initializ
         return true;
     }
 
+    @Override
     public void afterPropertiesSet() {
         HttpHost host = new HttpHost(this.host, this.port, this.proto);
         restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactoryBasicAuth(host));

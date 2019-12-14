@@ -1,9 +1,5 @@
 package com.javamentor.jm_spring_boot_front.config;
 
-import com.javamentor.jm_spring_boot_front.handler.AccessDeniedHandlerImpl;
-import com.javamentor.jm_spring_boot_front.handler.AuthenticationFailureHandlerImpl;
-import com.javamentor.jm_spring_boot_front.handler.AuthenticationSuccessHandlerImpl;
-import com.javamentor.jm_spring_boot_front.handler.LogoutSuccessHandlerImpl;
 import com.javamentor.jm_spring_boot_front.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,27 +18,23 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserService userService;
+    private final AccessDeniedHandler accessDeniedHandler;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
+    private final LogoutSuccessHandler logoutSuccessHandler;
+
     @Autowired
-    private UserService userService;
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new AuthenticationSuccessHandlerImpl();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new AuthenticationFailureHandlerImpl();
-    }
-
-    @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
-        return new LogoutSuccessHandlerImpl();
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new AccessDeniedHandlerImpl();
+    WebSecurityConfig(UserService userService,
+                      AccessDeniedHandler accessDeniedHandler,
+                      AuthenticationSuccessHandler authenticationSuccessHandler,
+                      AuthenticationFailureHandler authenticationFailureHandler,
+                      LogoutSuccessHandler logoutSuccessHandler) {
+        this.userService = userService;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+        this.logoutSuccessHandler = logoutSuccessHandler;
     }
 
     @Bean
@@ -67,13 +59,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/auth/sign-in")
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/sign-out"))
-                .logoutSuccessHandler(logoutSuccessHandler());
+                .logoutSuccessHandler(logoutSuccessHandler);
     }
 
 }

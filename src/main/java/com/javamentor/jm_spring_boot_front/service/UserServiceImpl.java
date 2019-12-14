@@ -6,6 +6,7 @@ import com.javamentor.jm_spring_boot_front.repository.RoleRepository;
 import com.javamentor.jm_spring_boot_front.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private final Map<String, Long> roleCache = new TreeMap<>();
     private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         super(userRepository);
         this.userRepository = userRepository;

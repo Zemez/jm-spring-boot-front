@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@Component
+@Component("authenticationSuccessHandler")
 public class AuthenticationSuccessHandlerImpl extends AbstractAuthenticationTargetUrlRequestHandler implements AuthenticationSuccessHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationSuccessHandlerImpl.class);
